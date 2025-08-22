@@ -11,7 +11,14 @@ export default function LandingPage() {
     <>
       <Header />
       <div className="flex flex-col items-center">
-        <h1>Trending kvitters!</h1>
+        <div className="flex flex-col items-center">
+          <h1 className="text-4xl">Welcome to Kvitter</h1>
+          <p className="text-lg">
+            A Twitter clone built with Next.js and Convex
+          </p>
+        </div>
+
+        <h1 className="mt-10 text-2xl">Trending kvitters!</h1>
         <div className="flex flex-col gap-2 border-1 border-green-800 p-2">
           {trending?.map((kvit) => (
             <KvitterCard
