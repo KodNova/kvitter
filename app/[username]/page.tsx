@@ -1,61 +1,30 @@
 "use client";
-import { Authenticated, useMutation } from "convex/react";
 import { useUser } from "@clerk/nextjs";
-import { useState } from "react";
-import { api } from "@/convex/_generated/api";
+import { useParams } from "next/navigation";
+import OwnProfile from "./ownProfile";
+import OtherProfile from "./otherProfile";
 
-export default function ProfilePage({
-  params,
-}: {
-  params: { username: string };
-}) {
-  const username: string = params.username;
-  const { user } = useUser();
-  const createPost = useMutation(api.kvitterPost.create);
-  const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function ProfilePage() {
+  const params = useParams();
+  const username: string = params.username as string;
+  const { user, isLoaded } = useUser();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!content.trim() || !user) return;
+  // Show loading state while Clerk is initializing
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
-    setIsSubmitting(true);
-    try {
-      await createPost({
-        content: content.trim(),
-        autherId: user.id,
-      });
-      setContent("");
-    } catch (error) {
-      console.error("Failed to create post:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  // Check if this is the user's own profile
+  const isOwnProfile = user?.username === username;
 
-  return (
-    <>
-      <p>Profile for {username}</p>
-      <Authenticated>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            name="kvit"
-            placeholder="Enter your kvit"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            disabled={isSubmitting}
-          />
-          <button
-            type="submit"
-            disabled={isSubmitting || !content.trim()}
-            className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
-        </form>
-      </Authenticated>
-    </>
-  );
+  // Render appropriate profile component
+  if (isOwnProfile) {
+    return <OwnProfile username={username} />;
+  } else {
+    return <OtherProfile username={username} />;
+  }
 }
