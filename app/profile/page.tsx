@@ -1,17 +1,25 @@
+//this is just for testing clerk
+//
+//
 "use client";
-import { SignIn, SignInButton } from "@clerk/nextjs";
-import { Authenticated, Unauthenticated } from "convex/react";
 
-export default function ProfilePage() {
+import { SignIn } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
+
+export default function Test() {
+  const { isSignedIn, user } = useUser();
+  if (!isSignedIn) {
+    return (
+      <>
+        <SignIn></SignIn>
+      </>
+    );
+  }
   return (
     <>
-      <Authenticated>
-        <p>profile</p>
-        <p>ok</p>
-      </Authenticated>
-      <Unauthenticated>
-        <SignIn></SignIn>
-      </Unauthenticated>
+      <p> hello {user.username}</p>
+      <p> your display name is {user.firstName}</p>
+      <p> your id is {user.id}</p>
     </>
   );
 }
