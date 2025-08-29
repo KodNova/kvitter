@@ -1,12 +1,12 @@
 type KvitterCardProps = {
   Views: number;
   Rekvits: number;
-  Likes: number;
+  Likes: string[];
   date: string;
   time: string;
   content: string;
   username: string;
-  name: string;
+  displayName: string;
 };
 
 export default function KvitterCard({
@@ -17,12 +17,12 @@ export default function KvitterCard({
   time,
   content,
   username = "usey",
-  name = "namy",
+  displayName = "Major Tom",
 }: KvitterCardProps) {
   return (
     <div>
       <div>
-        <h2>{name}</h2>
+        <h2>{displayName}</h2>
         <p>@{username}</p>
       </div>
       <div>
@@ -33,7 +33,7 @@ export default function KvitterCard({
           {time} - {date} - {Views} Views
         </p>
         <p>
-          {Rekvits} Rekvits - {Likes} Likes
+          {Rekvits} Rekvits - {Likes.length} Likes
         </p>
       </div>
     </div>

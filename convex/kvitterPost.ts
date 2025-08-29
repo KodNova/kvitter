@@ -8,21 +8,32 @@ export const get = query({
   },
 });
 
-export const create = mutation({
+export const createKvit = mutation({
   args: {
     content: v.string(),
-    autherId: v.string(),
+    authorId: v.string(),
   },
   handler: async (ctx, args) => {
     const postId = await ctx.db.insert("posts", {
       content: args.content,
       views: 0,
-      likes: 0,
+      likes: [],
       rekvits: 0,
-      autherId: args.autherId,
+      authorClerkId: args.authorId,
       isOriginal: true,
       parentId: undefined,
     });
     return postId;
+  },
+});
+
+export const getKvitsByUserId = query({
+  args: { authorId: v.string() },
+  handler: async (ctx, args) => {
+    const userPost = await ctx.db.query("posts").collect();
+    const filterdPost = userPost.filter(
+      (post) => post.authorClerkId === args.authorId,
+    );
+    return filterdPost;
   },
 });

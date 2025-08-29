@@ -1,14 +1,22 @@
 "use client";
-import { Authenticated, useMutation } from "convex/react";
+import { Authenticated, useMutation, useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { api } from "@/convex/_generated/api";
+import KvitterCard from "@/components/kvitterCard";
+import { formatDate, formatTime } from "@/utils/dateUtils";
 
 export default function OwnProfile({ username }: { username: string }) {
   const { user } = useUser();
-  const createPost = useMutation(api.kvitterPost.create);
+  const createKvit = useMutation(api.kvitterPost.createKvit);
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Fetch user's posts
+  const usersOwnPosts = useQuery(
+    api.kvitterPost.getKvitsByUserId,
+    user ? { authorId: user.id } : "skip",
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,9 +24,9 @@ export default function OwnProfile({ username }: { username: string }) {
 
     setIsSubmitting(true);
     try {
-      await createPost({
+      await createKvit({
         content: content.trim(),
-        autherId: user.id,
+        authorId: user.id,
       });
       setContent("");
     } catch (error) {
@@ -56,6 +64,32 @@ export default function OwnProfile({ username }: { username: string }) {
               {isSubmitting ? "Submitting..." : "Post Kvit"}
             </button>
           </form>
+        </div>
+
+        {/* Display user's posts */}
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <h2 className="mb-4 text-xl font-semibold">Your Posts</h2>
+          {usersOwnPosts === undefined ? (
+            <p className="text-gray-500">Loading your posts...</p>
+          ) : usersOwnPosts.length === 0 ? (
+            <p className="text-gray-500">You haven't posted anything yet.</p>
+          ) : (
+            <div className="space-y-4">
+              {usersOwnPosts.map((kvit) => (
+                <KvitterCard
+                  Rekvits={kvit.rekvits}
+                  Likes={kvit.likes}
+                  Views={kvit.views}
+                  key={kvit._id}
+                  date={formatDate(kvit._creationTime)}
+                  time={formatTime(kvit._creationTime)}
+                  content={kvit.content}
+                  username={kvit.authorClerkId}
+                  displayName={"Mayar Bob"}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </Authenticated>
     </div>

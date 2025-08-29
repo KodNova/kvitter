@@ -29,8 +29,8 @@ export default function LandingPage() {
               date={formatDate(kvit._creationTime)}
               time={formatTime(kvit._creationTime)}
               content={kvit.content}
-              username={kvit.autherId}
-              name={"need to get name"}
+              username={kvit.authorClerkId}
+              displayName={"need to get name"}
             />
           ))}
         </div>
