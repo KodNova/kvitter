@@ -5,6 +5,7 @@ import { useState } from "react";
 import { api } from "@/convex/_generated/api";
 import KvitterCard from "@/components/kvitterCard";
 import { formatDate, formatTime } from "@/utils/dateUtils";
+import type { PostWithUserInfo } from "@/types";
 
 export default function OwnProfile({ username }: { username: string }) {
   const { user } = useUser();
@@ -75,7 +76,7 @@ export default function OwnProfile({ username }: { username: string }) {
             <p className="text-gray-500">You haven't posted anything yet.</p>
           ) : (
             <div className="space-y-4">
-              {usersOwnPosts.map((kvit) => (
+              {usersOwnPosts.map((kvit: PostWithUserInfo) => (
                 <KvitterCard
                   Rekvits={kvit.rekvits}
                   Likes={kvit.likes}
@@ -84,8 +85,7 @@ export default function OwnProfile({ username }: { username: string }) {
                   date={formatDate(kvit._creationTime)}
                   time={formatTime(kvit._creationTime)}
                   content={kvit.content}
-                  username={kvit.authorClerkId}
-                  displayName={"Mayar Bob"}
+                  userInfo={kvit.userInfo}
                 />
               ))}
             </div>

@@ -1,3 +1,5 @@
+import type { UserInfo } from "@/types";
+
 type KvitterCardProps = {
   Views: number;
   Rekvits: number;
@@ -5,8 +7,7 @@ type KvitterCardProps = {
   date: string;
   time: string;
   content: string;
-  username: string;
-  displayName: string;
+  userInfo: UserInfo | null;
 };
 
 export default function KvitterCard({
@@ -16,14 +17,20 @@ export default function KvitterCard({
   date,
   time,
   content,
-  username = "usey",
-  displayName = "Major Tom",
+  userInfo,
 }: KvitterCardProps) {
   return (
     <div>
       <div>
-        <h2>{displayName}</h2>
-        <p>@{username}</p>
+        {userInfo?.imageUrl && (
+          <img
+            src={userInfo.imageUrl}
+            alt={`${userInfo.displayName}'s avatar`}
+            className="mr-2 h-10 w-10 rounded-full"
+          />
+        )}
+        <h2>{userInfo?.displayName || "Unknown User"}</h2>
+        <p>@{userInfo?.username || "unknown"}</p>
       </div>
       <div>
         <p>{content}</p>
