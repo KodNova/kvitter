@@ -18,7 +18,7 @@ export const upsertFromClerk = internalMutation({
       username:
         data.username ||
         data.email_addresses?.[0]?.email_address?.split("@")[0] ||
-        `user${data.id.slice(-6)}`,
+        "user" + data.id.slice(-6),
       imageUrl: data.image_url,
     };
 
