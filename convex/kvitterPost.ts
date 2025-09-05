@@ -89,3 +89,34 @@ export const getPostsWithUserInfo = query({
     return await getPostsWithUserInfoHelper(ctx);
   },
 });
+
+export const toggleLike = mutation({
+  args: {
+    postId: v.id("posts"),
+    userId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const post = await ctx.db.get(args.postId);
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    const currentLikes = post.likes;
+    const isLiked = currentLikes.includes(args.userId);
+
+    let newLikes;
+    if (isLiked) {
+      // Remove like
+      newLikes = currentLikes.filter((id) => id !== args.userId);
+    } else {
+      // Add like
+      newLikes = [...currentLikes, args.userId];
+    }
+
+    await ctx.db.patch(args.postId, {
+      likes: newLikes,
+    });
+
+    return { isLiked: !isLiked, likeCount: newLikes.length };
+  },
+});
