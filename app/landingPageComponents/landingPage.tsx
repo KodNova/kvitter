@@ -10,7 +10,7 @@ import type { PostWithUserInfo } from "@/types";
 export default function LandingPage() {
   const trending = useQuery(api.kvitterPost.get);
   const { user } = useUser();
-  
+
   return (
     <>
       <Header />
@@ -29,7 +29,6 @@ export default function LandingPage() {
               _id={kvit._id}
               Rekvits={kvit.rekvits}
               Likes={kvit.likes}
-              Views={kvit.views}
               key={kvit._id}
               date={formatDate(kvit._creationTime)}
               time={formatTime(kvit._creationTime)}

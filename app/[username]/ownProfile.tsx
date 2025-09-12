@@ -87,7 +87,6 @@ export default function OwnProfile({ username }: { username: string }) {
                   _id={kvit._id}
                   Rekvits={kvit.rekvits}
                   Likes={kvit.likes}
-                  Views={kvit.views}
                   key={kvit._id}
                   date={formatDate(kvit._creationTime)}
                   time={formatTime(kvit._creationTime)}

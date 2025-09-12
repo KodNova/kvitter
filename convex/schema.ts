@@ -14,7 +14,6 @@ export default defineSchema({
   posts: defineTable({
     authorClerkId: v.string(), // Store Clerk ID
     content: v.string(),
-    views: v.number(),
     likes: v.array(v.string()), // Array of Clerk IDs
     rekvits: v.number(),
     isOriginal: v.boolean(),

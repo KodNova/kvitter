@@ -127,7 +127,6 @@ export default function OtherProfile({ username }: { username: string }) {
               <KvitterCard
                 key={post._id}
                 _id={post._id}
-                Views={post.views}
                 Rekvits={post.rekvits}
                 Likes={post.likes}
                 date={new Date(post._creationTime).toLocaleDateString()}

@@ -6,7 +6,6 @@ import Link from "next/link";
 
 type KvitterCardProps = {
   _id: Id<"posts">;
-  Views: number;
   Rekvits: number;
   Likes: string[];
   date: string;
@@ -19,7 +18,6 @@ type KvitterCardProps = {
 
 export default function KvitterCard({
   _id,
-  Views,
   Rekvits,
   Likes,
   date,
@@ -84,7 +82,6 @@ export default function KvitterCard({
           <span>
             {time} - {date}
           </span>
-          <span>{Views} Views</span>
         </div>
         <div className="flex items-center space-x-4">
           <span>{Rekvits} Rekvits</span>

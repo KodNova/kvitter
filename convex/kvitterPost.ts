@@ -49,7 +49,6 @@ export const createKvit = mutation({
   handler: async (ctx, args) => {
     const postId = await ctx.db.insert("posts", {
       content: args.content,
-      views: 0,
       likes: [],
       rekvits: 0,
       authorClerkId: args.authorId,
