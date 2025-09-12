@@ -2,6 +2,7 @@ import type { UserInfo } from "@/types";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import Link from "next/link";
 
 type KvitterCardProps = {
   _id: Id<"posts">;
@@ -27,12 +28,12 @@ export default function KvitterCard({
   currentUserId,
 }: KvitterCardProps) {
   const toggleLike = useMutation(api.kvitterPost.toggleLike);
-  
+
   const isLiked = currentUserId ? Likes.includes(currentUserId) : false;
-  
+
   const handleLikeClick = async () => {
     if (!currentUserId) return;
-    
+
     try {
       await toggleLike({
         postId: _id,
@@ -44,7 +45,7 @@ export default function KvitterCard({
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+    <div className="space-y-3 rounded-lg border border-gray-200 p-4">
       <div className="flex items-center space-x-3">
         {userInfo?.imageUrl && (
           <img
@@ -54,18 +55,29 @@ export default function KvitterCard({
           />
         )}
         <div>
-          <h2 className="font-semibold text-gray-900">{userInfo?.displayName || "Unknown User"}</h2>
-          <p className="text-sm text-gray-500">@{userInfo?.username || "unknown"}</p>
+          <h2 className="font-semibold text-gray-900">
+            {userInfo?.displayName || "Unknown User"}
+          </h2>
+          <p className="text-sm text-gray-500">
+            @{userInfo?.username || "unknown"}
+          </p>
         </div>
       </div>
-      
+
       <div className="text-gray-800">
-        <p>{content}</p>
+        <Link
+          href={`/post/${_id}`}
+          className="-m-2 block rounded p-2 transition-colors hover:bg-gray-50"
+        >
+          <p>{content}</p>
+        </Link>
       </div>
-      
+
       <div className="flex items-center justify-between text-sm text-gray-500">
         <div className="flex items-center space-x-4">
-          <span>{time} - {date}</span>
+          <span>
+            {time} - {date}
+          </span>
           <span>{Views} Views</span>
         </div>
         <div className="flex items-center space-x-4">
@@ -73,8 +85,10 @@ export default function KvitterCard({
           <button
             onClick={handleLikeClick}
             disabled={!currentUserId}
-            className={`flex items-center space-x-1 hover:opacity-70 transition-opacity ${
-              !currentUserId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            className={`flex items-center space-x-1 transition-opacity hover:opacity-70 ${
+              !currentUserId
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer"
             }`}
           >
             <img

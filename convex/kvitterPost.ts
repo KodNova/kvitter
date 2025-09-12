@@ -1,5 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import type { PostWithUserInfo } from "../types";
 
 // Helper function to get posts with user info
 async function getPostsWithUserInfoHelper(ctx: any) {
@@ -87,6 +88,41 @@ export const getPostsWithUserInfo = query({
   args: {},
   handler: async (ctx) => {
     return await getPostsWithUserInfoHelper(ctx);
+  },
+});
+
+export const getPostById = query({
+  args: { postId: v.string() },
+  handler: async (ctx, args): Promise<PostWithUserInfo | null> => {
+    // Try to get the post, but handle invalid IDs gracefully
+    let post;
+    try {
+      post = await ctx.db.get(args.postId as any);
+    } catch (error) {
+      // If the ID format is invalid, return null
+      return null;
+    }
+
+    if (!post || !("authorClerkId" in post)) {
+      return null;
+    }
+
+    // Get user info for the author
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q: any) => q.eq("clerkId", post.authorClerkId))
+      .unique();
+
+    return {
+      ...post,
+      userInfo: user
+        ? {
+            username: user.username,
+            displayName: user.displayName,
+            imageUrl: user.imageUrl,
+          }
+        : null,
+    };
   },
 });
 
