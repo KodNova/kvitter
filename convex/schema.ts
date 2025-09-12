@@ -7,7 +7,9 @@ export default defineSchema({
     displayName: v.string(),
     username: v.string(),
     imageUrl: v.optional(v.string()),
-  }).index("by_clerk_id", ["clerkId"]),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_username", ["username"]),
 
   posts: defineTable({
     authorClerkId: v.string(), // Store Clerk ID

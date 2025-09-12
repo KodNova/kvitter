@@ -79,3 +79,15 @@ export const getUserInfoByClerkId = query({
     };
   },
 });
+
+export const getClerkIdByUsername = query({
+  args: { username: v.string() },
+  handler: async (ctx, { username }) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_username", (q) => q.eq("username", username))
+      .unique();
+
+    return user?.clerkId || null;
+  },
+});
