@@ -70,18 +70,20 @@ export default function OtherProfile({ username }: { username: string }) {
       <div className="rounded-lg bg-white p-6 shadow-md">
         <div className="py-8 text-center">
           <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-200">
-            {userInfo.imageUrl ? (
+            {userInfo!.imageUrl ? (
               <img
-                src={userInfo.imageUrl}
-                alt={`${userInfo.displayName}'s avatar`}
+                src={userInfo!.imageUrl}
+                alt={`${userInfo!.displayName}'s avatar`}
                 className="h-24 w-24 rounded-full object-cover"
               />
             ) : (
               <span className="text-2xl text-gray-500">👤</span>
             )}
           </div>
-          <h2 className="mb-2 text-xl font-semibold">{userInfo.displayName}</h2>
-          <p className="mb-4 text-gray-600">@{userInfo.username}</p>
+          <h2 className="mb-2 text-xl font-semibold">
+            {userInfo!.displayName}
+          </h2>
+          <p className="mb-4 text-gray-600">@{userInfo!.username}</p>
 
           {!user && (
             <div className="space-y-3">
