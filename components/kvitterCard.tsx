@@ -14,6 +14,7 @@ type KvitterCardProps = {
   content: string;
   userInfo: UserInfo | null;
   currentUserId?: string;
+  isPostPage?: boolean;
 };
 
 export default function KvitterCard({
@@ -26,6 +27,7 @@ export default function KvitterCard({
   content,
   userInfo,
   currentUserId,
+  isPostPage = false,
 }: KvitterCardProps) {
   const toggleLike = useMutation(api.kvitterPost.toggleLike);
 
@@ -58,22 +60,26 @@ export default function KvitterCard({
           <h2 className="font-semibold text-gray-900">
             {userInfo?.displayName || "Unknown User"}
           </h2>
-          <p className="text-sm text-gray-500">
-            @{userInfo?.username || "unknown"}
-          </p>
+          <p className="text-sm">@{userInfo?.username || "unknown"}</p>
         </div>
       </div>
 
-      <div className="text-gray-800">
+      <div className="text-emerald-100">
         <Link
           href={`/post/${_id}`}
-          className="-m-2 block rounded p-2 transition-colors hover:bg-gray-50"
+          className="-m-2 block rounded p-2 transition-colors hover:bg-neutral-100"
         >
           <p>{content}</p>
         </Link>
       </div>
+      {isPostPage && (
+        <div className="flex gap-10 border-t-1 border-b-1 border-neutral-700">
+          <span>Rekvits {Rekvits}</span>
+          <span>Likes {Likes.length}</span>
+        </div>
+      )}
 
-      <div className="flex items-center justify-between text-sm text-gray-500">
+      <div className="flex items-center justify-between text-sm">
         <div className="flex items-center space-x-4">
           <span>
             {time} - {date}
